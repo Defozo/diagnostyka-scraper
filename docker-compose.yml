@@ -1,0 +1,56 @@
+version: "3.9"
+services:
+  alpine-chrome:
+    image: "zenika/alpine-chrome:with-selenoid"
+    ports:
+      - "4444:4444"
+    healthcheck:
+        test: curl --fail http://localhost:4444 || exit 1
+        interval: 30s
+        timeout: 10s
+        retries: 5
+        start_period: 10s
+    networks:
+      chrome-network:
+        ipv4_address: 172.28.1.2
+    cap_add:
+      - SYS_ADMIN
+    shm_size: 2gb
+    volumes:
+      - "diagnostyka_downloads:/diagnostyka_downloads"
+    
+  diagnostykascraper:
+    build: .
+    image: "diagnostykascraper:latest"
+    environment:
+      - "CHROME_DRIVER_URL=http://172.28.1.2:4444/wd/hub"
+      - "DIAGNOSTYKA_USER_ID=<YOUR_LOGIN>"
+      - "DIAGNOSTYKA_USER_PASSWORD=<YOUR_PASSWORD>"
+      - "GOOGLE_DRIVE_FOLDER_ID=<YOUR_GOOGLE_DRIVE_FOLDER_ID>"
+      - "PRIVATE_KEY_FROM_P12_FILE_PATH=/credentials.p12"
+      - "SERVICE_ACCOUNT_ID=<YOUR_SERVICE_ACCOUNT_ID>@<YOUR_SERVICE_ACCOUNT_ID>.iam.gserviceaccount.com"
+      - "SHARED_DOWNLOADS_FOLDER=/diagnostyka_downloads"
+    volumes:
+      - "./<YOUR_CREDENTIALS_FILE_NAME>.p12:/credentials.p12"
+      - "diagnostyka_downloads:/diagnostyka_downloads"
+    restart: on-failure
+    depends_on:
+      - "alpine-chrome"
+    links:
+      - "alpine-chrome"
+    networks:
+      - chrome-network
+      
+networks:
+  chrome-network:
+    driver: bridge
+    enable_ipv6: false
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.1.0/24
+          gateway: 172.28.1.1
+
+volumes:
+  diagnostyka_downloads:
+        
