@@ -5,11 +5,11 @@ services:
     ports:
       - "4444:4444"
     healthcheck:
-        test: curl --fail http://localhost:4444 || exit 1
-        interval: 30s
-        timeout: 10s
-        retries: 5
-        start_period: 10s
+      test: curl --fail http://localhost:4444 || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
     networks:
       chrome-network:
         ipv4_address: 172.28.1.2
