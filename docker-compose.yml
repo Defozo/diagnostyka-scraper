@@ -19,9 +19,11 @@ services:
     volumes:
       - "diagnostyka_downloads:/diagnostyka_downloads"
     
-  diagnostykascraper:
-    build: .
-    image: "diagnostykascraper:latest"
+  diagnostyka-scraper:
+    build:
+      context: .
+      dockerfile: Dockerfile-without-chromedriver
+    image: "diagnostyka-scraper:latest"
     environment:
       - "CHROME_DRIVER_URL=http://172.28.1.2:4444/wd/hub"
       - "DIAGNOSTYKA_USER_ID=<YOUR_LOGIN>"
