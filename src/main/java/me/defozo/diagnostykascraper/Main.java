@@ -13,6 +13,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -74,16 +75,20 @@ public class Main {
                 .build();
 
         HashMap<String,Object> chromePrefs = new HashMap<>();
-        ChromeOptions options = new ChromeOptions();
+        ChromeOptions options = new ChromeOptions()
+                .setHeadless(true);
         chromePrefs.put("plugins.always_open_pdf_externally", true);
         chromePrefs.put("profile.default_content_settings.popups", 0);
         chromePrefs.put("download.default_directory", SHARED_DOWNLOADS_FOLDER.substring(0, SHARED_DOWNLOADS_FOLDER.length()-1));
         chromePrefs.put("browser.setDownloadBehavior", "allow");
         options.setExperimentalOption("prefs", chromePrefs);
-        options.addArguments("--headless");
-        driver = new RemoteWebDriver(
-                new URL(CHROME_DRIVER_URL),
-                options);
+        if (CHROME_DRIVER_URL != null) {
+            driver = new RemoteWebDriver(
+                    new URL(CHROME_DRIVER_URL),
+                    options);
+        } else {
+            driver = new ChromeDriver(options);
+        }
         driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
         js = (JavascriptExecutor) driver;
 
