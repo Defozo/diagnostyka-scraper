@@ -4,6 +4,8 @@
 
 This dockerized WebScraper written in Java allows you to download all PDF and CSV files from DIAGNOSTYKA's test results webpage (wyniki.diag.pl) to your Google Drive folder, and it allows you to convert downloaded CSV files into Google Spreadsheet.
 
+![diagnostykascraper](https://user-images.githubusercontent.com/8215510/172599278-9fca0967-bd3c-4448-921f-aed18e1d7c7d.png)
+
 ## Table of contents
 
 - [WebScraper for DIAGNOSTYKA's test results (wyniki.diag.pl)](#webscraper-for-diagnostykas-test-results-wynikidiagpl)
